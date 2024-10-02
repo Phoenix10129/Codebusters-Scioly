@@ -42,7 +42,7 @@
         .letterbox {
             display: inline-block;
             text-align: center;
-            margin: 0 2px;
+            margin: 0; /* No margin to ensure no gaps */
         }
         .ciphertext-box {
             width: 40px;
@@ -70,6 +70,11 @@
         #result {
             margin-top: 10px;
             font-size: 1.2em;
+        }
+        .ciphertext-row {
+            display: flex; /* Use flexbox for rows */
+            justify-content: center; /* Center content */
+            margin-bottom: 10px; /* Space between rows */
         }
     </style>
 </head>
@@ -104,15 +109,33 @@
                     // Prepare the ciphertext
                     const ciphertextDiv = document.getElementById('ciphertext');
                     ciphertextDiv.innerHTML = ''; // Clear any previous content
+                    
+                    let currentRow = document.createElement('div'); // Create a new row
+                    currentRow.className = 'ciphertext-row'; // Assign class for styling
+
                     for (let char of data.encrypted_quote) {
                         const letterboxDiv = document.createElement('div');
                         letterboxDiv.className = 'letterbox';
-                        letterboxDiv.innerHTML = `
+                        letterboxDiv.innerHTML = ` 
                             <div class="ciphertext-box">${char}</div>
                             <input type="text" class="plaintext-box" maxlength="1" />
                         `;
-                        ciphertextDiv.appendChild(letterboxDiv);
+
+                        currentRow.appendChild(letterboxDiv);
+
+                        // Check if next character is a space to start a new row
+                        if (char === ' ') {
+                            ciphertextDiv.appendChild(currentRow);
+                            currentRow = document.createElement('div'); // Create a new row
+                            currentRow.className = 'ciphertext-row'; // Assign class for styling
+                        }
                     }
+
+                    // Append the last row if it has characters
+                    if (currentRow.childNodes.length > 0) {
+                        ciphertextDiv.appendChild(currentRow);
+                    }
+
                     ciphertextDiv.style.display = 'block';
                     document.getElementById('ciphertext-label').style.display = 'block';
                 });

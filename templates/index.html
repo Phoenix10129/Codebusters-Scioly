@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porta Cipher Encoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            background-color: #5c6bc0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3f51b5;
+        }
+        .letterbox {
+            display: inline-block;
+            text-align: center;
+            margin: 0 2px;
+        }
+        .ciphertext-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #5c6bc0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            line-height: 40px; /* Center the text vertically */
+            font-size: 1.5em;
+        }
+        .plaintext-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #4caf50;
+            border-radius: 5px;
+            margin-top: 5px; /* Space between ciphertext and plaintext */
+            background-color: #f9f9f9;
+            line-height: 40px; /* Center the text vertically */
+            font-size: 1.5em;
+        }
+        #key {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #result {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Porta Cipher Encoder</h1>
+        <button id="fetch-quote">Fetch Encrypted Quote</button>
+        
+        <div id="ciphertext-label" style="display:none;">Ciphertext:</div>
+        <div id="ciphertext" style="display:none;"></div>
+        
+        <input type="text" id="plaintext" class="plaintext-box" placeholder="Enter deciphered text" />
+        <button id="check-decryption">Check Decryption</button>
+        
+        <div id="key" style="display:none;"></div>
+        <div id="result" style="margin-top: 10px; font-size: 1.2em;"></div>
+    </div>
+
+    <script>
+        let originalQuote = ''; // Variable to hold the original quote
+
+        document.getElementById('fetch-quote').addEventListener('click', function() {
+            fetch('/get-encrypted-quote')
+                .then(response => response.json())
+                .then(data => {
+                    // Store the original quote for later use
+                    originalQuote = data.original_quote;
+                    // Display the key
+                    document.getElementById('key').textContent = `Key: ${data.key}`;
+                    document.getElementById('key').style.display = 'block';
+
+                    // Prepare the ciphertext
+                    const ciphertextDiv = document.getElementById('ciphertext');
+                    ciphertextDiv.innerHTML = ''; // Clear any previous content
+                    for (let char of data.encrypted_quote) {
+                        const letterboxDiv = document.createElement('div');
+                        letterboxDiv.className = 'letterbox';
+                        letterboxDiv.innerHTML = `
+                            <div class="ciphertext-box">${char}</div>
+                            <input type="text" class="plaintext-box" maxlength="1" />
+                        `;
+                        ciphertextDiv.appendChild(letterboxDiv);
+                    }
+                    ciphertextDiv.style.display = 'block';
+                    document.getElementById('ciphertext-label').style.display = 'block';
+                });
+        });
+
+        document.getElementById('check-decryption').addEventListener('click', function() {
+            const userInput = Array.from(document.querySelectorAll('.plaintext-box')).map(input => input.value).join('');
+            // Log the original quote to the terminal for testing
+            console.log(`Original Quote: ${originalQuote}`);
+            if (userInput === originalQuote) {
+                document.getElementById('result').textContent = "Correct! 🎉";
+                document.getElementById('result').style.color = "green";
+            } else {
+                document.getElementById('result').textContent = "Incorrect. Try Again!";
+                document.getElementById('result').style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

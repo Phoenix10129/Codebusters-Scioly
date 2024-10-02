@@ -1,0 +1,90 @@
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4a4a4a;
+    color: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+main {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.letterbox-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.letterbox {
+    width: 40px; /* Width for each letter box */
+    height: 40px; /* Height for each letter box */
+    margin: 0 5px; /* Space between letter boxes */
+    border: 2px solid #4a4a4a;
+    border-radius: 5px;
+    font-size: 24px; /* Size of the letters inside the box */
+    text-align: center;
+    line-height: 40px; /* Center letters vertically */
+}
+
+input {
+    width: 40px; /* Width for the input boxes */
+    height: 40px; /* Height for the input boxes */
+    margin: 0 5px; /* Space between input boxes */
+    border: 2px solid #4a4a4a;
+    border-radius: 5px;
+    font-size: 24px; /* Size of the letters inside the box */
+    text-align: center;
+}
+
+input:focus {
+    border-color: #6a6a6a;
+    outline: none;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #555;
+    transform: scale(1.05);
+}
+
+#result {
+    margin-top: 30px;
+    font-size: 1.5em;
+    transition: color 0.3s;
+}
+
+#result.correct {
+    color: #4caf50; /* Green for correct */
+}
+
+#result.incorrect {
+    color: #f44336; /* Red for incorrect */
+}

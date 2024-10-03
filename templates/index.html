@@ -42,33 +42,26 @@
         .letterbox {
             display: inline-block;
             text-align: center;
+        }
+        .ciphertext-box, .plaintext-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            line-height: 40px;
+            font-size: 1.5em;
             margin: 0; /* No margin to ensure no gaps */
         }
         .ciphertext-box {
-            width: 40px;
-            height: 40px;
             border: 2px solid #5c6bc0;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            line-height: 40px; /* Center the text vertically */
-            font-size: 1.5em;
         }
         .plaintext-box {
-            width: 40px;
-            height: 40px;
             border: 2px solid #4caf50;
-            border-radius: 5px;
             margin-top: 5px; /* Space between ciphertext and plaintext */
-            background-color: #f9f9f9;
-            line-height: 40px; /* Center the text vertically */
-            font-size: 1.5em;
         }
-        #key {
+        #key, #result {
             margin-top: 10px;
             font-weight: bold;
-        }
-        #result {
-            margin-top: 10px;
             font-size: 1.2em;
         }
         .ciphertext-row {
@@ -90,29 +83,32 @@
         <button id="check-decryption">Check Decryption</button>
         
         <div id="key" style="display:none;"></div>
-        <div id="result" style="margin-top: 10px; font-size: 1.2em;"></div>
+        <div id="result"></div>
     </div>
 
     <script>
         let originalQuote = ''; // Variable to hold the original quote
 
+        // Fetch encrypted quote and display it
         document.getElementById('fetch-quote').addEventListener('click', function() {
             fetch('/get-encrypted-quote')
                 .then(response => response.json())
                 .then(data => {
                     // Store the original quote for later use
                     originalQuote = data.original_quote;
+
                     // Display the key
                     document.getElementById('key').textContent = `Key: ${data.key}`;
                     document.getElementById('key').style.display = 'block';
 
-                    // Prepare the ciphertext
+                    // Prepare the ciphertext display
                     const ciphertextDiv = document.getElementById('ciphertext');
                     ciphertextDiv.innerHTML = ''; // Clear any previous content
                     
                     let currentRow = document.createElement('div'); // Create a new row
                     currentRow.className = 'ciphertext-row'; // Assign class for styling
 
+                    // Iterate through each character in the encrypted quote
                     for (let char of data.encrypted_quote) {
                         const letterboxDiv = document.createElement('div');
                         letterboxDiv.className = 'letterbox';
@@ -123,7 +119,7 @@
 
                         currentRow.appendChild(letterboxDiv);
 
-                        // Check if next character is a space to start a new row
+                        // Check if the character is a space to start a new row
                         if (char === ' ') {
                             ciphertextDiv.appendChild(currentRow);
                             currentRow = document.createElement('div'); // Create a new row
@@ -136,21 +132,25 @@
                         ciphertextDiv.appendChild(currentRow);
                     }
 
+                    // Display the ciphertext and label
                     ciphertextDiv.style.display = 'block';
                     document.getElementById('ciphertext-label').style.display = 'block';
                 });
         });
 
+        // Check the user input against the original quote
         document.getElementById('check-decryption').addEventListener('click', function() {
             const userInput = Array.from(document.querySelectorAll('.plaintext-box')).map(input => input.value).join('');
-            // Log the original quote to the terminal for testing
-            console.log(`Original Quote: ${originalQuote}`);
+            console.log(`Original Quote: ${originalQuote}`); // Log the original quote for testing
+
+            // Validate the user input
+            const resultDiv = document.getElementById('result');
             if (userInput === originalQuote) {
-                document.getElementById('result').textContent = "Correct! 🎉";
-                document.getElementById('result').style.color = "green";
+                resultDiv.textContent = "Correct! 🎉";
+                resultDiv.style.color = "green";
             } else {
-                document.getElementById('result').textContent = "Incorrect. Try Again!";
-                document.getElementById('result').style.color = "red";
+                resultDiv.textContent = "Incorrect. Try Again!";
+                resultDiv.style.color = "red";
             }
         });
     </script>

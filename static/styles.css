@@ -88,3 +88,7 @@ button:hover {
 #result.incorrect {
     color: #f44336; /* Red for incorrect */
 }
+.ciphertext-row{
+    width: 100vw;
+    overflow: scroll;
+}

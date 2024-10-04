@@ -3,3 +3,4 @@ Flask-Cors==3.0.10       # If you're making API calls across different domains
 requests==2.26.0          # For making HTTP requests (if applicable)
 firebase-admin==5.0.0     # For Firebase integration
 gunicorn==20.1.0          # WSGI HTTP Server for running the app in production
+werkzeug == 2.3.8
